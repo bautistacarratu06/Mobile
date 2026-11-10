@@ -1,0 +1,31 @@
+.auth-brand {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ion-color-primary);
+}
+
+.auth-actions {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-links {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--ion-color-primary);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}

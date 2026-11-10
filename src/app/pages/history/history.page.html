@@ -1,0 +1,82 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home" aria-label="Volver al inicio">
+        Inicio
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Historial · Quizly</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="quizly-shell" aria-labelledby="history-heading">
+    <ion-card class="history-card">
+      <ion-card-header>
+        <ion-card-title id="history-heading" role="heading" aria-level="1">
+          Historial
+        </ion-card-title>
+        <ion-card-subtitle>
+          Resultados de tus partidas guardadas.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          *ngIf="isLoading"
+          class="history-status"
+          role="status"
+          data-testid="history-loading"
+        >
+          <ion-spinner name="crescent" aria-hidden="true"></ion-spinner>
+          <p>Cargando historial...</p>
+        </div>
+
+        <div
+          *ngIf="!isLoading && errorMessage"
+          class="quizly-banner quizly-banner--error"
+          role="alert"
+          aria-live="polite"
+          data-testid="history-error"
+        >
+          <div class="history-error-body">
+            <p>{{ errorMessage }}</p>
+            <ion-button
+              size="small"
+              type="button"
+              (click)="loadHistory()"
+              data-testid="history-retry-btn"
+            >
+              Reintentar
+            </ion-button>
+          </div>
+        </div>
+
+        <div
+          *ngIf="!isLoading && !errorMessage && entries.length === 0"
+          class="history-status"
+          role="status"
+          data-testid="history-empty"
+        >
+          <p>Todavía no hay partidas guardadas</p>
+        </div>
+
+        <ion-list
+          *ngIf="!isLoading && !errorMessage && entries.length > 0"
+          lines="full"
+          data-testid="history-list"
+        >
+          <ion-item *ngFor="let entry of entries">
+            <ion-label>
+              <h2 data-testid="history-score">{{ displayScore(entry) }}</h2>
+              <p data-testid="history-date">{{ formatDate(entry.createdAt) }}</p>
+              <p *ngIf="metaText(entry)" data-testid="history-meta">
+                {{ metaText(entry) }}
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>

@@ -1,0 +1,62 @@
+.profile-card {
+  margin: 0 0 1.25rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.user-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.user-summary__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.user-summary__label {
+  font-size: 0.9rem;
+  color: var(--quizly-text-secondary);
+}
+
+.user-summary__value {
+  font-weight: 700;
+  color: var(--quizly-text-primary);
+}
+
+.verification-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  &--verified {
+    background: var(--quizly-success-surface);
+    color: var(--quizly-success-text);
+  }
+
+  &--pending {
+    background: var(--quizly-warning-surface);
+    color: var(--quizly-warning-text);
+  }
+}
+
+.support-note {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--quizly-text-secondary);
+}
+
+.password-submit-btn {
+  margin-top: 1rem;
+}
+
+.logout-section {
+  margin-top: 1.5rem;
+}

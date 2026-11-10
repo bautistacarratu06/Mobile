@@ -1,0 +1,160 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button
+        type="button"
+        color="medium"
+        (click)="abandonQuiz()"
+        data-testid="abandon-quiz-btn"
+        aria-label="Abandonar partida y volver al inicio"
+      >
+        Salir
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      <span class="progress-title" data-testid="quiz-progress-text">
+        Pregunta {{ currentIndex + 1 }} de {{ totalQuestions }}
+      </span>
+    </ion-title>
+  </ion-toolbar>
+
+  <ion-progress-bar
+    [value]="progressValue"
+    color="primary"
+    aria-label="Progreso de la partida"
+  ></ion-progress-bar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main
+    class="quizly-shell"
+    *ngIf="displayQuestion as question"
+    aria-labelledby="quiz-question-heading"
+  >
+    <div class="quiz-meta-bar">
+      <div class="quiz-badges">
+        <span class="meta-badge meta-badge--category">
+          {{ question.category }}
+        </span>
+        <span
+          class="meta-badge"
+          [ngClass]="'meta-badge--' + question.difficulty"
+        >
+          Dificultad: {{ difficultyLabel(question.difficulty) }}
+        </span>
+      </div>
+
+      <div class="score-pill" role="status" aria-live="polite" data-testid="quiz-score">
+        Puntaje: <strong>{{ score }}</strong>
+      </div>
+    </div>
+
+    <ion-card class="question-card">
+      <ion-card-header>
+        <ion-card-title
+          id="quiz-question-heading"
+          role="heading"
+          aria-level="1"
+          class="question-text"
+          data-testid="quiz-question-text"
+        >
+          {{ question.question }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          class="answers-list"
+          role="radiogroup"
+          aria-labelledby="quiz-question-heading"
+        >
+          <button
+            *ngFor="let option of question.answers; trackBy: trackByAnswerId; let idx = index"
+            type="button"
+            class="answer-option quizly-touch-target"
+            [ngClass]="getOptionStateClass(option)"
+            [disabled]="isAnswered"
+            role="radio"
+            [attr.aria-checked]="selectedAnswerId === option.id"
+            (click)="selectAnswer(option.id)"
+            [attr.data-testid]="'answer-option-' + idx"
+          >
+            <span class="answer-option__letter" aria-hidden="true">
+              {{ ['A', 'B', 'C', 'D'][idx] || (idx + 1) }}
+            </span>
+
+            <span class="answer-option__text">{{ option.text }}</span>
+
+            <span
+              *ngIf="!isAnswered && selectedAnswerId === option.id"
+              class="answer-option__badge answer-option__badge--selected"
+            >
+              Seleccionada
+            </span>
+
+            <span
+              *ngIf="isAnswered && option.isCorrect"
+              class="answer-option__badge answer-option__badge--correct"
+            >
+              ✓ Correcta
+            </span>
+
+            <span
+              *ngIf="isAnswered && selectedAnswerId === option.id && !option.isCorrect"
+              class="answer-option__badge answer-option__badge--incorrect"
+            >
+              ✕ Tu elección
+            </span>
+          </button>
+        </div>
+
+        <div
+          *ngIf="isAnswered"
+          #feedbackRegionRef
+          tabindex="-1"
+          class="quizly-banner feedback-banner"
+          [ngClass]="
+            lastAnswerCorrect
+              ? 'quizly-banner--success'
+              : 'quizly-banner--error'
+          "
+          role="status"
+          aria-live="polite"
+          data-testid="quiz-feedback-banner"
+        >
+          <strong>
+            {{ lastAnswerCorrect ? '✓ ¡Correcto!' : '✕ Incorrecto' }}
+          </strong>
+          <span>{{ feedbackText }}</span>
+        </div>
+
+        <div class="quiz-actions">
+          <ion-button
+            *ngIf="!isAnswered"
+            expand="block"
+            size="large"
+            type="button"
+            [disabled]="!selectedAnswerId"
+            (click)="submitAnswer()"
+            data-testid="confirm-answer-btn"
+          >
+            Comprobar respuesta
+          </ion-button>
+
+          <ion-button
+            *ngIf="isAnswered"
+            expand="block"
+            size="large"
+            color="primary"
+            type="button"
+            (click)="nextOrFinish()"
+            data-testid="next-question-btn"
+          >
+            {{ isLastQuestion ? 'Ver resultados' : 'Siguiente pregunta' }}
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>

@@ -1,0 +1,105 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Resultados · Quizly</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main
+    class="quizly-shell"
+    *ngIf="hasValidResults"
+    aria-labelledby="results-heading"
+  >
+    <ion-card class="results-card">
+      <ion-card-header class="results-header">
+        <p class="results-eyebrow" role="status">Partida completada</p>
+        <ion-card-title
+          id="results-heading"
+          role="heading"
+          aria-level="1"
+          class="results-title"
+          data-testid="results-performance-title"
+        >
+          {{ performanceTitle }}
+        </ion-card-title>
+        <ion-card-subtitle class="results-subtitle">
+          {{ performanceSubtitle }}
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          class="score-summary"
+          role="region"
+          aria-label="Resumen de puntaje"
+          data-testid="results-score-summary"
+        >
+          <div class="score-stat">
+            <span class="score-stat__label">Respuestas correctas</span>
+            <span class="score-stat__value" data-testid="results-correct-count">
+              {{ score }} / {{ totalQuestions }}
+            </span>
+          </div>
+
+          <div class="score-stat">
+            <span class="score-stat__label">Porcentaje de acierto</span>
+            <span class="score-stat__value score-stat__value--accent" data-testid="results-percentage">
+              {{ percentage }}%
+            </span>
+          </div>
+        </div>
+
+        <div class="accuracy-bar-block">
+          <div class="accuracy-bar-labels">
+            <span>Precisión alcanzada</span>
+            <strong>{{ percentage }}% ({{ score }} de {{ totalQuestions }})</strong>
+          </div>
+          <ion-progress-bar
+            [value]="accuracyRatio"
+            color="primary"
+            role="progressbar"
+            [attr.aria-valuenow]="percentage"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-label="Porcentaje de respuestas correctas"
+          ></ion-progress-bar>
+        </div>
+
+        <div class="results-actions">
+          <ion-button
+            expand="block"
+            size="large"
+            color="primary"
+            type="button"
+            (click)="playAgain()"
+            data-testid="play-again-btn"
+          >
+            Jugar de nuevo
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            size="large"
+            fill="outline"
+            type="button"
+            routerLink="/history"
+            data-testid="view-history-btn"
+          >
+            Ver historial
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            size="large"
+            fill="outline"
+            type="button"
+            (click)="goHome()"
+            data-testid="back-home-btn"
+          >
+            Volver al inicio
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>

@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/auth/login" aria-label="Volver al login">
+        Volver
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Confirmar email</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="quizly-shell" aria-labelledby="confirm-email-heading">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title id="confirm-email-heading" role="heading" aria-level="1">
+          Confirmá tu correo
+        </ion-card-title>
+        <ion-card-subtitle>
+          Ingresá el código de 6 dígitos enviado por Amazon Cognito.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          *ngIf="infoMessage"
+          class="quizly-banner quizly-banner--info"
+          role="status"
+          aria-live="polite"
+        >
+          <span>{{ infoMessage }}</span>
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="quizly-banner quizly-banner--error"
+          role="alert"
+          aria-live="polite"
+        >
+          <strong>Error:</strong>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <ion-item>
+            <ion-input
+              label="Correo electrónico"
+              labelPlacement="stacked"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Código de confirmación"
+              labelPlacement="stacked"
+              type="text"
+              inputmode="numeric"
+              formControlName="code"
+              autocomplete="one-time-code"
+              placeholder="123456"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <div class="confirm-actions">
+            <ion-button
+              expand="block"
+              type="submit"
+              [disabled]="isSubmitting"
+              data-testid="confirm-email-submit-btn"
+            >
+              {{ isSubmitting ? 'Verificando...' : 'Confirmar email' }}
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              fill="outline"
+              type="button"
+              (click)="onResendCode()"
+              [disabled]="isResending || isSubmitting"
+            >
+              {{ isResending ? 'Enviando...' : 'Reenviar código' }}
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>

@@ -1,0 +1,127 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home" aria-label="Volver al inicio">
+        Inicio
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Quizly · Iniciar sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="quizly-shell" aria-labelledby="login-heading">
+    <ion-card>
+      <ion-card-header>
+        <p class="auth-brand">Quizly</p>
+        <ion-card-title id="login-heading" role="heading" aria-level="1">
+          Iniciar sesión
+        </ion-card-title>
+        <ion-card-subtitle>
+          Ingresá con tu cuenta para jugar y guardar tu progreso.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          *ngIf="infoMessage"
+          class="quizly-banner quizly-banner--success"
+          role="status"
+          aria-live="polite"
+        >
+          <strong>Listo:</strong>
+          <span>{{ infoMessage }}</span>
+        </div>
+
+        <div
+          *ngIf="errorMessage"
+          class="quizly-banner quizly-banner--error"
+          role="alert"
+          aria-live="polite"
+        >
+          <strong>Error:</strong>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <ion-item>
+            <ion-input
+              label="Correo electrónico"
+              labelPlacement="stacked"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="tu@email.com"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Contraseña"
+              labelPlacement="stacked"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              required
+            ></ion-input>
+            <ion-button
+              fill="clear"
+              slot="end"
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+            </ion-button>
+          </ion-item>
+
+          <div class="auth-actions">
+            <ion-button
+              expand="block"
+              type="submit"
+              [disabled]="isSubmitting"
+              data-testid="login-submit-btn"
+            >
+              <ion-spinner
+                *ngIf="isSubmitting"
+                name="crescent"
+                slot="start"
+                aria-hidden="true"
+              ></ion-spinner>
+              {{ isSubmitting ? 'Ingresando...' : 'Iniciar sesión' }}
+            </ion-button>
+
+            <ion-button
+              expand="block"
+              fill="solid"
+              color="medium"
+              type="button"
+              (click)="skipLogin()"
+              data-testid="login-skip-btn"
+            >
+              Continuar como invitado
+            </ion-button>
+          </div>
+        </form>
+
+        <nav class="auth-links" aria-label="Opciones de cuenta">
+          <a
+            routerLink="/auth/register"
+            [queryParams]="{ returnUrl: returnUrl }"
+            class="quizly-touch-target"
+          >
+            Crear cuenta
+          </a>
+          <a
+            routerLink="/auth/forgot-password"
+            class="quizly-touch-target"
+          >
+            ¿Olvidaste tu contraseña?
+          </a>
+        </nav>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>

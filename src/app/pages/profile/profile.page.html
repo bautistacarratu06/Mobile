@@ -1,0 +1,191 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home" aria-label="Volver al inicio">
+        Inicio
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mi perfil · Quizly</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="quizly-shell" aria-labelledby="profile-heading">
+    <ion-card class="profile-card">
+      <ion-card-header>
+        <ion-card-title id="profile-heading" role="heading" aria-level="1">
+          Cuenta y preferencias
+        </ion-card-title>
+        <ion-card-subtitle *ngIf="user">
+          Sesión iniciada como <strong>{{ user.email || user.username }}</strong>
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content *ngIf="user">
+        <div class="user-summary">
+          <div class="user-summary__row">
+            <span class="user-summary__label">Correo electrónico:</span>
+            <span class="user-summary__value" data-testid="profile-email">
+              {{ user.email || user.username }}
+            </span>
+          </div>
+          <div class="user-summary__row">
+            <span class="user-summary__label">Estado de verificación:</span>
+            <span
+              class="verification-badge"
+              [ngClass]="
+                user.emailVerified
+                  ? 'verification-badge--verified'
+                  : 'verification-badge--pending'
+              "
+            >
+              {{ user.emailVerified ? '✓ Email verificado' : 'Pendiente de verificación' }}
+            </span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="profile-card">
+      <ion-card-header>
+        <ion-card-title role="heading" aria-level="2">
+          Ajustes de juego
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="full">
+          <ion-item>
+            <ion-toggle
+              [checked]="hapticsEnabled"
+              [disabled]="!hapticsSupported"
+              (ionChange)="onHapticsToggle($any($event).detail.checked)"
+              data-testid="haptics-toggle"
+            >
+              Feedback háptico (vibrar al responder)
+            </ion-toggle>
+          </ion-item>
+
+          <p
+            *ngIf="!hapticsSupported"
+            class="support-note"
+            role="status"
+            data-testid="haptics-unsupported-note"
+          >
+            La vibración háptica no está disponible en este navegador o dispositivo.
+          </p>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="profile-card" *ngIf="!isGuestUser">
+      <ion-card-header>
+        <ion-card-title role="heading" aria-level="2">
+          Cambiar contraseña
+        </ion-card-title>
+        <ion-card-subtitle>
+          Actualizá tu contraseña de acceso de forma segura.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          *ngIf="passwordError"
+          class="quizly-banner quizly-banner--error"
+          role="alert"
+          aria-live="polite"
+          data-testid="profile-password-error"
+        >
+          {{ passwordError }}
+        </div>
+
+        <div
+          *ngIf="passwordSuccess"
+          class="quizly-banner quizly-banner--success"
+          role="status"
+          aria-live="polite"
+          data-testid="profile-password-success"
+        >
+          {{ passwordSuccess }}
+        </div>
+
+        <form (ngSubmit)="submitPasswordChange()" novalidate>
+          <ion-list lines="full">
+            <ion-item>
+              <ion-input
+                label="Contraseña actual"
+                labelPlacement="stacked"
+                type="password"
+                autocomplete="current-password"
+                [value]="currentPassword"
+                (ionInput)="currentPassword = $any($event).detail?.value ?? ''"
+                required
+                data-testid="current-password-input"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Nueva contraseña"
+                labelPlacement="stacked"
+                type="password"
+                autocomplete="new-password"
+                [value]="newPassword"
+                (ionInput)="newPassword = $any($event).detail?.value ?? ''"
+                required
+                data-testid="new-password-input"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Confirmar nueva contraseña"
+                labelPlacement="stacked"
+                type="password"
+                autocomplete="new-password"
+                [value]="confirmNewPassword"
+                (ionInput)="confirmNewPassword = $any($event).detail?.value ?? ''"
+                required
+                data-testid="confirm-new-password-input"
+              ></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="password-submit-btn"
+            [disabled]="isChangingPassword"
+            data-testid="change-password-btn"
+          >
+            {{ isChangingPassword ? 'Actualizando...' : 'Actualizar contraseña' }}
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      type="button"
+      routerLink="/history"
+      data-testid="profile-history-link"
+    >
+      Ver historial
+    </ion-button>
+
+    <div class="logout-section">
+      <ion-button
+        expand="block"
+        color="danger"
+        fill="outline"
+        type="button"
+        [disabled]="isLoggingOut"
+        (click)="logout()"
+        data-testid="logout-btn"
+      >
+        {{ isLoggingOut ? 'Cerrando sesión...' : 'Cerrar sesión y limpiar partida' }}
+      </ion-button>
+    </div>
+  </main>
+</ion-content>

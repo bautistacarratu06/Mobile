@@ -1,0 +1,231 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <span class="brand-logo" aria-label="Quizly">Quizly</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ng-container *ngIf="isAuthenticated$ | async; else guestActions">
+        <ion-button
+          routerLink="/history"
+          data-testid="home-history-link"
+          aria-label="Ver historial de partidas"
+        >
+          Historial
+        </ion-button>
+        <ion-button
+          routerLink="/profile"
+          data-testid="home-profile-link"
+          aria-label="Abrir mi perfil y ajustes"
+        >
+          Perfil
+        </ion-button>
+      </ng-container>
+      <ng-template #guestActions>
+        <ion-button
+          routerLink="/auth/login"
+          data-testid="home-login-link"
+        >
+          Iniciar sesión
+        </ion-button>
+      </ng-template>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="quizly-shell" aria-labelledby="home-hero-title">
+    <section class="hero-section">
+      <p class="hero-eyebrow">Trivia interactiva · OpenTDB</p>
+      <h1 id="home-hero-title" class="hero-title">
+        Pon a prueba tus conocimientos
+      </h1>
+      <p class="hero-subtitle">
+        Personalizá la cantidad de preguntas, categoría, dificultad e idioma para empezar una partida en segundos.
+      </p>
+
+      <div
+        *ngIf="currentUser$ | async as user"
+        class="session-pill"
+        role="status"
+      >
+        <span>Sesión activa: <strong>{{ user.email || user.username }}</strong></span>
+        <a routerLink="/profile" class="quizly-touch-target">Ver perfil</a>
+      </div>
+
+      <div
+        *ngIf="(isAuthenticated$ | async) === false"
+        class="session-pill session-pill--guest"
+        role="status"
+      >
+        <span>Iniciá sesión para guardar tu sesión y jugar partidas protegidas.</span>
+        <a routerLink="/auth/login" class="quizly-touch-target">Entrar ahora</a>
+      </div>
+    </section>
+
+    <div
+      *ngIf="configWarning$ | async as warning"
+      class="quizly-banner quizly-banner--info"
+      role="status"
+    >
+      <strong>Aviso de configuración:</strong>
+      <span>{{ warning }}</span>
+    </div>
+
+    <div
+      *ngIf="errorMessage"
+      #errorBannerRef
+      tabindex="-1"
+      class="quizly-banner quizly-banner--error"
+      role="alert"
+      aria-live="polite"
+      data-testid="home-error-banner"
+    >
+      <div class="error-banner-body">
+        <strong>
+          {{ errorCode === 'NO_RESULTS' ? 'Sin resultados para estos filtros:' : 'No se pudo iniciar la trivia:' }}
+        </strong>
+        <p>{{ errorMessage }}</p>
+        <div class="error-recovery-actions">
+          <ion-button
+            *ngIf="errorCode === 'NO_RESULTS'"
+            size="small"
+            fill="outline"
+            type="button"
+            (click)="resetFilters()"
+            data-testid="home-reset-filters-btn"
+          >
+            Restablecer filtros recomendados
+          </ion-button>
+          <ion-button
+            *ngIf="errorCode !== 'INVALID_PARAMS'"
+            size="small"
+            color="primary"
+            type="button"
+            (click)="startQuiz()"
+            [disabled]="isLoading"
+            data-testid="home-retry-btn"
+          >
+            Reintentar
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <ion-card class="setup-card">
+      <ion-card-header>
+        <ion-card-title role="heading" aria-level="2">
+          Configurar partida
+        </ion-card-title>
+        <ion-card-subtitle>
+          Elegí entre 1 y 50 preguntas reales de Open Trivia Database.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form (ngSubmit)="startQuiz()" novalidate>
+          <ion-list lines="full">
+            <ion-item>
+              <ion-input
+                label="Cantidad de preguntas (1 a 50)"
+                labelPlacement="stacked"
+                type="number"
+                min="1"
+                max="50"
+                [value]="amount"
+                (ionInput)="onAmountInput($any($event).detail?.value)"
+                required
+                data-testid="home-amount-input"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                label="Categoría"
+                labelPlacement="stacked"
+                [value]="selectedCategory"
+                (ionChange)="selectedCategory = $any($event).detail.value"
+                interface="popover"
+                data-testid="home-category-select"
+              >
+                <ion-select-option value="all">
+                  Todas las categorías
+                </ion-select-option>
+                <ion-select-option
+                  *ngFor="let cat of categories"
+                  [value]="cat.id"
+                >
+                  {{ cat.name }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                label="Dificultad"
+                labelPlacement="stacked"
+                [value]="selectedDifficulty"
+                (ionChange)="selectedDifficulty = $any($event).detail.value"
+                interface="popover"
+                data-testid="home-difficulty-select"
+              >
+                <ion-select-option value="any">
+                  Cualquier dificultad
+                </ion-select-option>
+                <ion-select-option value="easy">Fácil</ion-select-option>
+                <ion-select-option value="medium">Media</ion-select-option>
+                <ion-select-option value="hard">Difícil</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                label="Tipo de preguntas"
+                labelPlacement="stacked"
+                [value]="selectedType"
+                (ionChange)="selectedType = $any($event).detail.value"
+                interface="popover"
+                data-testid="home-type-select"
+              >
+                <ion-select-option value="any">
+                  Cualquier tipo
+                </ion-select-option>
+                <ion-select-option value="multiple">
+                  Opción múltiple
+                </ion-select-option>
+                <ion-select-option value="boolean">
+                  Verdadero / Falso
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+
+          <div class="start-quiz-actions" aria-live="polite">
+            <ion-button
+              expand="block"
+              size="large"
+              type="submit"
+              [disabled]="isLoading"
+              data-testid="start-quiz-btn"
+            >
+              <ion-spinner
+                *ngIf="isLoading"
+                name="crescent"
+                slot="start"
+                aria-hidden="true"
+              ></ion-spinner>
+              {{ isLoading ? 'Cargando preguntas...' : 'Comenzar quiz' }}
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>
+
+<ion-footer class="ion-no-border home-footer" role="contentinfo">
+  <ion-toolbar class="home-footer-toolbar">
+    <p class="home-footer-notice" data-testid="footer-translation-notice">
+      Esta aplicación todavía no está disponible en español. El contenido está en inglés.
+    </p>
+  </ion-toolbar>
+</ion-footer>

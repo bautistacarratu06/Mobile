@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Quizly</string>
+    <string name="title_activity_main">Quizly</string>
+    <string name="package_name">com.ifts11.quizly</string>
+    <string name="custom_url_scheme">com.ifts11.quizly</string>
+</resources>

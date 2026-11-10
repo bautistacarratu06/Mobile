@@ -1,0 +1,101 @@
+/*
+ * Quizly Global Styles (Mobile-first, WCAG AA accessible, Safe Areas)
+ */
+
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* Safe area & responsive container layout */
+.quizly-shell {
+  width: 100%;
+  max-width: var(--quizly-max-width-mobile);
+  margin: 0 auto;
+  padding: 16px;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .quizly-shell {
+    max-width: var(--quizly-max-width-tablet);
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .quizly-shell {
+    max-width: var(--quizly-max-width-desktop);
+    padding: 32px;
+  }
+}
+
+/* Touch targets >= 44px (IFT-1, IFT-13) */
+ion-button,
+ion-item,
+ion-select,
+ion-toggle,
+button.quizly-touch-target,
+a.quizly-touch-target {
+  min-height: var(--quizly-touch-target-min, 44px);
+}
+
+/* Visible keyboard focus for accessibility (Fase 13) */
+:focus-visible {
+  outline: 3px solid var(--ion-color-primary);
+  outline-offset: 2px;
+}
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Semantic status banners (never rely on color alone) */
+.quizly-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--quizly-radius-md);
+  border: 2px solid var(--quizly-border);
+  margin: 12px 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.quizly-banner--success {
+  background: var(--quizly-success-bg);
+  border-color: var(--quizly-success-border);
+  color: var(--quizly-success-text);
+}
+
+.quizly-banner--error {
+  background: var(--quizly-error-bg);
+  border-color: var(--quizly-error-border);
+  color: var(--quizly-error-text);
+}
+
+.quizly-banner--info {
+  background: var(--quizly-surface-elevated);
+  border-color: var(--quizly-border);
+  color: var(--quizly-text-primary);
+}

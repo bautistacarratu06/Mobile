@@ -1,0 +1,97 @@
+// Quizly Accessible Design System Palette & Tokens
+// Defined once and shared across all components (IFT-1, IFT-13)
+
+:root {
+  /* Core Semantic Palette (WCAG AA compliant contrast) */
+  --quizly-bg: #f8fafc;
+  --quizly-surface: #ffffff;
+  --quizly-surface-elevated: #f1f5f9;
+  --quizly-text-primary: #0f172a;
+  --quizly-text-secondary: #475569;
+  --quizly-border: #cbd5e1;
+
+  /* Primary Action (Indigo 600 - contrast > 7:1 on white) */
+  --ion-color-primary: #4f46e5;
+  --ion-color-primary-rgb: 79, 70, 229;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #4338ca;
+  --ion-color-primary-tint: #6366f1;
+
+  /* Success / Correct Answer (Emerald 700 - high contrast) */
+  --ion-color-success: #047857;
+  --ion-color-success-rgb: 4, 120, 87;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #065f46;
+  --ion-color-success-tint: #10b981;
+  --quizly-success-bg: #ecfdf5;
+  --quizly-success-border: #059669;
+  --quizly-success-text: #065f46;
+
+  /* Danger / Incorrect Answer (Rose 700 - high contrast) */
+  --ion-color-danger: #be123c;
+  --ion-color-danger-rgb: 190, 18, 60;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #9f1239;
+  --ion-color-danger-tint: #e11d48;
+  --quizly-error-bg: #fff1f2;
+  --quizly-error-border: #e11d48;
+  --quizly-error-text: #881337;
+
+  /* Warning */
+  --ion-color-warning: #b45309;
+  --ion-color-warning-rgb: 180, 83, 9;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #92400e;
+  --ion-color-warning-tint: #d97706;
+
+  /* Neutral / Secondary */
+  --ion-color-medium: #475569;
+  --ion-color-medium-rgb: 71, 85, 105;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #334155;
+  --ion-color-medium-tint: #64748b;
+
+  /* Ionic Background & Text Globals */
+  --ion-background-color: var(--quizly-bg);
+  --ion-text-color: var(--quizly-text-primary);
+  --ion-card-background: var(--quizly-surface);
+  --ion-item-background: var(--quizly-surface);
+  --ion-toolbar-background: var(--quizly-surface);
+  --ion-toolbar-color: var(--quizly-text-primary);
+
+  /* Typography, Spacing & Touch Targets */
+  --ion-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --quizly-touch-target-min: 44px;
+  --quizly-radius-sm: 8px;
+  --quizly-radius-md: 12px;
+  --quizly-radius-lg: 16px;
+  --quizly-shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --quizly-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --quizly-max-width-mobile: 100%;
+  --quizly-max-width-tablet: 680px;
+  --quizly-max-width-desktop: 760px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --quizly-bg: #0f172a;
+    --quizly-surface: #1e293b;
+    --quizly-surface-elevated: #334155;
+    --quizly-text-primary: #f8fafc;
+    --quizly-text-secondary: #cbd5e1;
+    --quizly-border: #475569;
+
+    --quizly-success-bg: rgba(16, 185, 129, 0.16);
+    --quizly-success-border: #34d399;
+    --quizly-success-text: #a7f3d0;
+
+    --quizly-error-bg: rgba(244, 63, 94, 0.16);
+    --quizly-error-border: #fb7185;
+    --quizly-error-text: #fecdd3;
+  }
+}

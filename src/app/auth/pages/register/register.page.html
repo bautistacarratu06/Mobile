@@ -1,0 +1,109 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/auth/login" aria-label="Volver a iniciar sesión">
+        Volver
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Quizly · Crear cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <main class="quizly-shell" aria-labelledby="register-heading">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title id="register-heading" role="heading" aria-level="1">
+          Crear cuenta
+        </ion-card-title>
+        <ion-card-subtitle>
+          Registrate con tu email para jugar en Quizly.
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div
+          *ngIf="errorMessage"
+          class="quizly-banner quizly-banner--error"
+          role="alert"
+          aria-live="polite"
+        >
+          <strong>Revisá los datos:</strong>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div class="quizly-banner quizly-banner--info" id="password-policy-hint">
+          <div>
+            <strong>Requisitos de contraseña:</strong>
+            Mínimo 8 caracteres, al menos una letra mayúscula, una minúscula, un número y un símbolo (por ejemplo <code>#</code>, <code>!</code>, <code>&#64;</code>).
+          </div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <ion-item>
+            <ion-input
+              label="Correo electrónico"
+              labelPlacement="stacked"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="tu@email.com"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Contraseña"
+              labelPlacement="stacked"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="new-password"
+              aria-describedby="password-policy-hint"
+              required
+            ></ion-input>
+            <ion-button
+              fill="clear"
+              slot="end"
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="
+                showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+              "
+            >
+              {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+            </ion-button>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Confirmar contraseña"
+              labelPlacement="stacked"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              autocomplete="new-password"
+              required
+            ></ion-input>
+          </ion-item>
+
+          <div class="register-actions">
+            <ion-button
+              expand="block"
+              type="submit"
+              [disabled]="isSubmitting"
+              data-testid="register-submit-btn"
+            >
+              <ion-spinner
+                *ngIf="isSubmitting"
+                name="crescent"
+                slot="start"
+                aria-hidden="true"
+              ></ion-spinner>
+              {{ isSubmitting ? 'Creando cuenta...' : 'Crear cuenta' }}
+            </ion-button>
+          </div>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </main>
+</ion-content>
