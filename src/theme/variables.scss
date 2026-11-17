@@ -95,3 +95,77 @@
     --quizly-error-text: #fecdd3;
   }
 }
+
+/* Dark mode contrast fix: Ionic computes card titles, subtitles, labels and
+   placeholders from the *-rgb and step variables. Without them it falls back
+   to black-based grays, which look gray-on-gray over dark surfaces. */
+:root {
+  --ion-background-color-rgb: 248, 250, 252;
+  --ion-text-color-rgb: 15, 23, 42;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-background-color-rgb: 15, 23, 42;
+    --ion-text-color-rgb: 248, 250, 252;
+
+    --ion-color-medium: #cbd5e1;
+    --ion-color-medium-rgb: 203, 213, 225;
+    --ion-color-medium-contrast: #0f172a;
+    --ion-color-medium-contrast-rgb: 15, 23, 42;
+    --ion-color-medium-shade: #b3bcc6;
+    --ion-color-medium-tint: #d0d9e4;
+
+    --ion-color-primary: #818cf8;
+    --ion-color-primary-rgb: 129, 140, 248;
+    --ion-color-primary-contrast: #0f172a;
+    --ion-color-primary-contrast-rgb: 15, 23, 42;
+    --ion-color-primary-shade: #6366f1;
+    --ion-color-primary-tint: #a5b4fc;
+
+    --ion-color-step-50: #1e293b;
+    --ion-color-step-100: #2a3547;
+    --ion-color-step-150: #364152;
+    --ion-color-step-200: #434d5e;
+    --ion-color-step-250: #4f5969;
+    --ion-color-step-300: #5b6575;
+    --ion-color-step-350: #687180;
+    --ion-color-step-400: #747d8c;
+    --ion-color-step-450: #808997;
+    --ion-color-step-500: #8d95a3;
+    --ion-color-step-550: #99a1ae;
+    --ion-color-step-600: #a5adba;
+    --ion-color-step-650: #b2b9c5;
+    --ion-color-step-700: #bec5d1;
+    --ion-color-step-750: #cad1dc;
+    --ion-color-step-800: #d7dde8;
+    --ion-color-step-850: #e3e9f3;
+    --ion-color-step-900: #eff4fb;
+    --ion-color-step-950: #f8fafc;
+    --ion-text-color-step-50: #eff4fb;
+    --ion-text-color-step-100: #e3e9f3;
+    --ion-text-color-step-150: #d7dde8;
+    --ion-text-color-step-200: #cad1dc;
+    --ion-text-color-step-250: #bec5d1;
+    --ion-text-color-step-300: #b2b9c5;
+    --ion-text-color-step-350: #a5adba;
+    --ion-text-color-step-400: #99a1ae;
+    --ion-text-color-step-450: #8d95a3;
+    --ion-text-color-step-500: #808997;
+    --ion-background-color-step-50: #1e293b;
+    --ion-background-color-step-100: #2a3547;
+    --ion-background-color-step-150: #364152;
+    --ion-background-color-step-200: #434d5e;
+  }
+
+  ion-card-title {
+    color: var(--quizly-text-primary);
+  }
+
+  ion-card-subtitle,
+  ion-card-content,
+  ion-note,
+  ion-label p {
+    color: var(--quizly-text-secondary);
+  }
+}
